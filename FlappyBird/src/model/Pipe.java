@@ -7,18 +7,14 @@ public class Pipe {
     private int y;
     private int width;
     private int height;
+    private int gap;
+    private int spacing;
     private Image image;
-    private boolean passed = false;
 
-    public Pipe(int x, int y, int width, int height) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-    }
-
-    public Pipe(Image image) {
-        this.image = image;
+    public Pipe() {
+        this.gap = 150;
+        this.spacing = 200;
+        this.width = 50;
     }
 
     public int getX() {
@@ -53,19 +49,27 @@ public class Pipe {
         this.height = height;
     }
 
+    public int getGap() {
+        return gap;
+    }
+
+    public void setGap(int gap) {
+        this.gap = gap;
+    }
+
+    public int getSpacing() {
+        return spacing;
+    }
+
+    public void setSpacing(int spacing) {
+        this.spacing = spacing;
+    }
+
     public Image getImage() {
         return image;
     }
 
     public void setImage(Image image) {
         this.image = image;
-    }
-
-    public boolean isPassed() {
-        return passed;
-    }
-
-    public void setPassed(boolean passed) {
-        this.passed = passed;
     }
 }
