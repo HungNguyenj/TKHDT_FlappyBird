@@ -1,5 +1,7 @@
 package model;
 
+import util.Constants;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
@@ -8,23 +10,24 @@ public class Bird {
     private double x;
     private double y;
     private double velocity;
-    private int width;
-    private int height;
+    private int width = Constants.BIRD_WIDTH;
+    private int height = Constants.BIRD_HEIGHT;
     private Image image;
     private int score;
+    private double gravity = Constants.GRAVITY;
     private boolean gameOver;
-    private final int PIPE_GAP = 150;
-    private final int PIPE_SPACING = 200;
-    private final int PIPE_WIDTH = 50;
     private final Random random;
 
     private static Bird instance;
 
     //pipe
     private ArrayList<Rectangle> pipes;
+    private ArrayList<Boolean> pipePassed;
+    private int pipeSpeed = Constants.PIPE_SPEED;
 
     private Bird() {
         this.pipes = new ArrayList<>();
+        this.pipePassed = new ArrayList<>();
         random = new Random();
         gameOver = false;
         score = 0;
@@ -39,14 +42,9 @@ public class Bird {
         return instance;
     }
 
-    public Bird(Image image, Random random) {
-        this.image = image;
-        this.random = random;
-    }
-
     public void update() {
         if (!isGameOver()) {
-            this.velocity += 0.5;
+            this.velocity += gravity;
             this.y += getVelocity();
 
             //kiem tra va cham voi mat dat hoac tran
@@ -57,23 +55,30 @@ public class Bird {
             //update pipe
             for (int i = pipes.size() - 1; i >= 0; i--) {
                 Rectangle pipe = pipes.get(i);
-                pipe.x -= 3; // Di chuyển ống sang trái
+                pipe.x -= pipeSpeed; // Di chuyển ống sang trái
 
-                // Kiểm tra va chạm với ống
-                Rectangle birdRect = new Rectangle((int) this.x, (int) this.y, 30, 30);
+                // check
+                Rectangle birdRect = new Rectangle((int) this.x, (int) this.y, width, height);
                 if (birdRect.intersects(pipe)) {
                     gameOver = true;
                 }
 
-                // Xóa ống ra khỏi màn hình và thêm ống mới
-                if (pipe.x < -pipe.getWidth()) {
-                    pipes.remove(i);
+                // score
+                if (i % 2 == 0 && !pipePassed.get(i) && pipe.getX() + pipe.getWidth() < this.x) {
                     score++;
+                    pipePassed.set(i, true);
                 }
+
+                // Xóa ống ra khỏi màn hình và thêm ống mới
+                if (pipe.getX() < -pipe.getWidth()) {
+                    pipes.remove(i);
+                    pipePassed.remove(i);
+                }
+                
             }
 
             //add pipe
-            if (pipes.isEmpty() || pipes.get(pipes.size() - 1).x < 800 - PIPE_SPACING) {
+            if (pipes.isEmpty() || pipes.get(pipes.size() - 1).x < Constants.BOARD_WIDTH - Constants.PIPE_SPACING) {
                 addPipe();
             }
         }
@@ -82,7 +87,7 @@ public class Bird {
 
     public void jump() {
         if (!isGameOver()) {
-            this.velocity -= 10;
+            this.velocity = - Constants.JUMP_VELOCITY;
         }
     }
 
@@ -93,13 +98,17 @@ public class Bird {
         this.setY(300);
         velocity = 0;
         pipes.clear();
+        pipePassed.clear();
         addPipe();
     }
 
     private void addPipe() {
         int pipeHeight = 100 + random.nextInt(300);
-        pipes.add(new Rectangle(800, 0, PIPE_WIDTH, pipeHeight)); // Ống trên
-        pipes.add(new Rectangle(800, pipeHeight + PIPE_GAP, PIPE_WIDTH, 600)); // Ống dưới
+        pipes.add(new Rectangle(800, 0, Constants.PIPE_WIDTH, pipeHeight)); // top pipe
+        pipes.add(new Rectangle(800, pipeHeight + Constants.PIPE_GAP, Constants.PIPE_WIDTH, 600)); // bottom pipe
+
+        pipePassed.add(false); // top
+        pipePassed.add(false); // bottom
     }
 
     public double getVelocity() {

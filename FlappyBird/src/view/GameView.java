@@ -1,7 +1,7 @@
 package view;
 
 import model.Bird;
-import model.Pipe;
+import util.Constants;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -11,8 +11,8 @@ import java.io.File;
 import java.io.IOException;
 
 public class GameView extends JPanel {
-    private final int boardWidth = 800;
-    private final int boardHeight = 600;
+    public final int boardWidth = 800;
+    public final int boardHeight = 600;
 
     private BufferedImage birdImage;
     private BufferedImage topPipeImage;
@@ -20,8 +20,6 @@ public class GameView extends JPanel {
     private BufferedImage backgroundImage;
 
     private Bird bird;
-    private Pipe topPipe;
-    private Pipe bottomPipe;
 
     public GameView() throws IOException {
         birdImage = ImageIO.read(new File("src/image/flappybird.png"));
@@ -29,15 +27,13 @@ public class GameView extends JPanel {
         topPipeImage = ImageIO.read(new File("src/image/toppipe.png"));
         bottomPipeImage = ImageIO.read(new File("src/image/bottompipe.png"));
 
-        bird  = Bird.getInstance();
-        bird.setImage(birdImage);
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        g.drawImage(backgroundImage, 0, 0, boardWidth, boardHeight, null);
+        g.drawImage(backgroundImage, 0, 0, Constants.BOARD_WIDTH, Constants.BOARD_HEIGHT, null);
 
         g.drawImage(bird.getImage(), (int) bird.getX(), (int) bird.getY(), 30, 30, null);
 
@@ -53,6 +49,11 @@ public class GameView extends JPanel {
             }
         }
 
+        // score
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Arial", Font.BOLD, 24));
+        g.drawString("Score: " + bird.getScore(), 30, 50);
+
         //game over
         if (bird.isGameOver()) {
             g.setColor(Color.RED);
@@ -67,11 +68,8 @@ public class GameView extends JPanel {
         return bird;
     }
 
-    public Pipe getTopPipe() {
-        return topPipe;
-    }
-
-    public Pipe getBottomPipe() {
-        return bottomPipe;
+    public void setBird(Bird bird) {
+        this.bird = bird;
+        bird.setImage(birdImage);
     }
 }

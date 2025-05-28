@@ -1,5 +1,7 @@
 package model;
 
+import util.Constants;
+
 import java.awt.*;
 
 public class Pipe {
@@ -12,9 +14,9 @@ public class Pipe {
     private Image image;
 
     public Pipe() {
-        this.gap = 150;
-        this.spacing = 200;
-        this.width = 50;
+        this.gap = Constants.PIPE_GAP;
+        this.spacing = Constants.PIPE_SPACING;
+        this.width = Constants.PIPE_WIDTH;
     }
 
     public int getX() {
