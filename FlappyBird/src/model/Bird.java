@@ -18,16 +18,25 @@ public class Bird {
     private final int PIPE_WIDTH = 50;
     private final Random random;
 
+    private static Bird instance;
+
     //pipe
     private ArrayList<Rectangle> pipes;
 
-    public Bird() {
+    private Bird() {
         this.pipes = new ArrayList<>();
         random = new Random();
         gameOver = false;
         score = 0;
         this.setX(100);
         this.setY(300);
+    }
+
+    public static Bird getInstance() {
+        if (instance == null) {
+            instance = new Bird();
+        }
+        return instance;
     }
 
     public Bird(Image image, Random random) {

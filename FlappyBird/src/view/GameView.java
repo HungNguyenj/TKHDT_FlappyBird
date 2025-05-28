@@ -29,7 +29,7 @@ public class GameView extends JPanel {
         topPipeImage = ImageIO.read(new File("src/image/toppipe.png"));
         bottomPipeImage = ImageIO.read(new File("src/image/bottompipe.png"));
 
-        bird  = new Bird();
+        bird  = Bird.getInstance();
         bird.setImage(birdImage);
     }
 
@@ -42,8 +42,15 @@ public class GameView extends JPanel {
         g.drawImage(bird.getImage(), (int) bird.getX(), (int) bird.getY(), 30, 30, null);
 
         //draw pipe
-        for (Rectangle pipe : bird.getPipes()) {
-            g.drawImage(bottomPipeImage, pipe.x, pipe.y, pipe.width, pipe.height, null);
+        for (int i = 0; i < bird.getPipes().size(); i++) {
+            Rectangle pipe = bird.getPipes().get(i);
+            if (i % 2 == 0) {
+                // Top pipe
+                g.drawImage(topPipeImage, pipe.x, pipe.y, pipe.width, pipe.height, null);
+            } else {
+                // Bottom pipe
+                g.drawImage(bottomPipeImage, pipe.x, pipe.y, pipe.width, pipe.height, null);
+            }
         }
 
         //game over
