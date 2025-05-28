@@ -1,4 +1,4 @@
-package util;
+package config;
 
 public class Constants {
     public static final int BOARD_WIDTH = 800;

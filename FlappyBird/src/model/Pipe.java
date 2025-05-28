@@ -1,7 +1,5 @@
 package model;
 
-import util.Constants;
-
 import java.awt.*;
 
 public class Pipe {
@@ -9,69 +7,51 @@ public class Pipe {
     private int y;
     private int width;
     private int height;
-    private int gap;
-    private int spacing;
-    private Image image;
+    private boolean isTop;
+    private boolean passed;
 
-    public Pipe() {
-        this.gap = Constants.PIPE_GAP;
-        this.spacing = Constants.PIPE_SPACING;
-        this.width = Constants.PIPE_WIDTH;
+    public Pipe(int x, int y, int width, int height, boolean isTop, boolean passed) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.isTop = isTop;
+        this.passed = passed;
+    }
+
+    public void move(int dx) {
+        this.x -= dx;
+    }
+
+    public Rectangle getBounds() {
+        return new Rectangle(this.x, this.y, this.width, this.height);
+    }
+
+    public boolean isTop() {
+        return isTop;
+    }
+
+    public boolean isPassed() {
+        return passed;
+    }
+
+    public void setPassed(boolean passed) {
+        this.passed = passed;
     }
 
     public int getX() {
         return x;
     }
 
-    public void setX(int x) {
-        this.x = x;
-    }
-
     public int getY() {
         return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
     }
 
     public int getWidth() {
         return width;
     }
 
-    public void setWidth(int width) {
-        this.width = width;
-    }
-
     public int getHeight() {
         return height;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
-    }
-
-    public int getGap() {
-        return gap;
-    }
-
-    public void setGap(int gap) {
-        this.gap = gap;
-    }
-
-    public int getSpacing() {
-        return spacing;
-    }
-
-    public void setSpacing(int spacing) {
-        this.spacing = spacing;
-    }
-
-    public Image getImage() {
-        return image;
-    }
-
-    public void setImage(Image image) {
-        this.image = image;
     }
 }

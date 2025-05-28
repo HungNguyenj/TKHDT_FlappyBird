@@ -1,7 +1,9 @@
 package view;
 
 import model.Bird;
-import util.Constants;
+import model.Pipe;
+import model.PipeManager;
+import config.Constants;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -11,15 +13,13 @@ import java.io.File;
 import java.io.IOException;
 
 public class GameView extends JPanel {
-    public final int boardWidth = 800;
-    public final int boardHeight = 600;
-
     private BufferedImage birdImage;
     private BufferedImage topPipeImage;
     private BufferedImage bottomPipeImage;
     private BufferedImage backgroundImage;
 
     private Bird bird;
+    private PipeManager pipeManager;
 
     public GameView() throws IOException {
         birdImage = ImageIO.read(new File("src/image/flappybird.png"));
@@ -38,21 +38,18 @@ public class GameView extends JPanel {
         g.drawImage(bird.getImage(), (int) bird.getX(), (int) bird.getY(), 30, 30, null);
 
         //draw pipe
-        for (int i = 0; i < bird.getPipes().size(); i++) {
-            Rectangle pipe = bird.getPipes().get(i);
-            if (i % 2 == 0) {
-                // Top pipe
-                g.drawImage(topPipeImage, pipe.x, pipe.y, pipe.width, pipe.height, null);
+        for (Pipe pipe : pipeManager.getPipes()) {
+            if (pipe.isTop()) {
+                g.drawImage(topPipeImage, pipe.getX(), pipe.getY(), pipe.getWidth(), pipe.getHeight(), null);
             } else {
-                // Bottom pipe
-                g.drawImage(bottomPipeImage, pipe.x, pipe.y, pipe.width, pipe.height, null);
+                g.drawImage(bottomPipeImage, pipe.getX(), pipe.getY(), pipe.getWidth(), pipe.getHeight(), null);
             }
         }
 
         // score
         g.setColor(Color.WHITE);
         g.setFont(new Font("Arial", Font.BOLD, 24));
-        g.drawString("Score: " + bird.getScore(), 30, 50);
+        g.drawString("Score: " + pipeManager.getScore(), 30, 50);
 
         //game over
         if (bird.isGameOver()) {
@@ -71,5 +68,13 @@ public class GameView extends JPanel {
     public void setBird(Bird bird) {
         this.bird = bird;
         bird.setImage(birdImage);
+    }
+
+    public PipeManager getPipeManager() {
+        return pipeManager;
+    }
+
+    public void setPipeManager(PipeManager pipeManager) {
+        this.pipeManager = pipeManager;
     }
 }
