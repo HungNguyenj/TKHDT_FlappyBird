@@ -9,7 +9,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 public class GameController {
-    private GameView view;
     private Bird bird;
     private PipeManager pipeManager;
     private Timer timer;
@@ -17,7 +16,6 @@ public class GameController {
     public GameController(GameView view) {
         this.bird = Bird.getInstance();
         this.pipeManager = new PipeManager();
-        this.view = view;
 
         view.setBird(bird);
         view.setPipeManager(pipeManager);
